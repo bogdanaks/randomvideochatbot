@@ -11,6 +11,8 @@ services:
     volumes:
       - "./nginx:/app"
     restart: always
+    depends_on:
+      - client
     networks:
       - app_network
   client:
