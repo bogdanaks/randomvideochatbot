@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from "react"
-import SimplePeer from "simple-peer"
+import { useEffect } from "react"
+import * as SimplePeer from "simple-peer"
 
 import { Wrapper } from "shared/ui/wrapper"
 
 import styles from "./styles.module.css"
 
-const simplePeer = new SimplePeer()
+// const simplePeer = new SimplePeer()
 
 const MainPage = () => {
   useEffect(() => {
