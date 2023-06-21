@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  nginx:
+    container_name: rvc_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - "./nginx:/app"
+    restart: always
+    networks:
+      - app_network
+  client:
+    container_name: rvc_client
+    ports:
+      - "3000:3000"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - "./frontend:/app"
+      - "/app/node_modules"
+    environment:
+      - REACT_APP_API_URL=https://bogdanaks.ru
+      - REACT_APP_TEST_MODE=false
+    restart: always
+    networks:
+      - app_network
+networks:
+  app_network:
+    driver: bridge
