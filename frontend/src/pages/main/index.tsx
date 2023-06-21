@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import * as SimplePeer from "simple-peer"
+import SimplePeer from "simple-peer"
 
 import { Wrapper } from "shared/ui/wrapper"
 
