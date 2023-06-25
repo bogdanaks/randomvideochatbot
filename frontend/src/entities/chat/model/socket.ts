@@ -4,11 +4,11 @@ import { config } from "shared/config"
 
 export let socket: Socket
 
-export function setSocket(userId: number) {
+export function setSocket(initData: string) {
   socket = io(config.API_URL, {
     autoConnect: false,
     auth: {
-      user_id: userId,
+      initData,
     },
     reconnectionDelay: 10000,
     reconnectionDelayMax: 10000,

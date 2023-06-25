@@ -16,8 +16,6 @@ import { authReducer } from "entities/auth/model/slice"
 import { chatApi } from "entities/chat/api"
 import { chatReducer } from "entities/chat/model/slice"
 import { consoleAlertReducer } from "entities/console-alert/model/slice"
-import { gameApi } from "entities/game/api"
-import { gameReducer } from "entities/game/model/slice"
 import { userReducer } from "entities/user/model/slice"
 
 const persistConfig = {
@@ -30,11 +28,9 @@ const rootReducer = combineReducers({
   consoleAlert: consoleAlertReducer,
   chat: chatReducer,
   auth: authReducer,
-  game: gameReducer,
   user: userReducer,
   [authApi.reducerPath]: authApi.reducer,
   [chatApi.reducerPath]: chatApi.reducer,
-  [gameApi.reducerPath]: gameApi.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -48,7 +44,6 @@ export const store = configureStore({
       },
     })
       .concat(authApi.middleware)
-      .concat(gameApi.middleware)
       .concat(chatApi.middleware),
   devTools: process.env.REACT_APP_ENVIRONMENT !== "production",
 })

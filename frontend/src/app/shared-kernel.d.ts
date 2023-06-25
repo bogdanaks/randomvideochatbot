@@ -90,6 +90,7 @@ interface TgUser {
   language_code: string
   last_name?: string
   is_premium?: boolean
+  username?: string
 }
 
 interface UserEntity {

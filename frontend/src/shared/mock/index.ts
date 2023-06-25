@@ -62,17 +62,21 @@ export const getMockTgUser = (userId: string): TgUser => {
   return mockUserData.user
 }
 
-const mockUserEntity = {
-  id: 856090780,
-  first_name: "Bogdan",
-  last_name: "A",
-  language_code: "ru",
-  is_premium: true,
-  photo_url: "/photos/856090780.jpg",
-  gender: "M",
-  age: 18,
-  position: 1,
-  created_at: "2023-05-27T02:06:01.507Z",
-  updated_at: "2023-05-27T02:06:01.507Z",
-  hearts: 3,
+export const getMockTgInitData = (): string => {
+  return "query_id=AAGc6AYzAAAAAJzoBjMvWBXV&user=%7B%22id%22%3A856090780%2C%22first_name%22%3A%22Bogdan%22%2C%22last_name%22%3A%22A%22%2C%22username%22%3A%22bogdanaks%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%7D&auth_date=1687557783&hash=7e82cfdcc1ac588b775bcfc9525c8f3672b64d589bd3ae49f3a89629a075954d"
 }
+
+// const mockUserEntity = {
+//   id: 856090780,
+//   first_name: "Bogdan",
+//   last_name: "A",
+//   language_code: "ru",
+//   is_premium: true,
+//   photo_url: "/photos/856090780.jpg",
+//   gender: "M",
+//   age: 18,
+//   position: 1,
+//   created_at: "2023-05-27T02:06:01.507Z",
+//   updated_at: "2023-05-27T02:06:01.507Z",
+//   hearts: 3,
+// }

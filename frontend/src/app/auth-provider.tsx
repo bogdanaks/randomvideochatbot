@@ -6,7 +6,7 @@ import { useTelegram } from "entities/telegram/model"
 
 import { Loader } from "shared/ui/loader"
 
-const InitProvider = () => {
+export const AuthProvider = () => {
   const telegram = useTelegram()
   const [login, { isLoading, data }] = useLoginMutation()
 
@@ -53,5 +53,3 @@ const InitProvider = () => {
     <Navigate to="/sign-in" state={{ form: location }} replace />
   )
 }
-
-export default InitProvider

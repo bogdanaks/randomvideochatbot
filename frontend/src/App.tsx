@@ -1,4 +1,6 @@
-import TelegramProvider from "processes/telegram"
+import { PeerProvider } from "processes/peer-context"
+import SocketProvider from "processes/socket-provider"
+import TelegramProvider from "processes/telegram-provider"
 import { FC } from "react"
 import { Route, Routes } from "react-router-dom"
 
@@ -13,10 +15,12 @@ const App: FC = () => {
   return (
     <Routes>
       <Route element={<TelegramProvider />}>
-        {/* <Route element={<InitProvider />}> */}
-        {/* <Route element={<SocketProvider />}> */}
-        <Route path="/" element={<MainPage />} />
-        {/* </Route> */}
+        {/* <Route element={<AuthProvider />}> */}
+        <Route element={<SocketProvider />}>
+          <Route element={<PeerProvider />}>
+            <Route path="/" element={<MainPage />} />
+          </Route>
+        </Route>
       </Route>
       <Route path="/sign-in" element={<SignInPage />} />
       {/* </Route> */}

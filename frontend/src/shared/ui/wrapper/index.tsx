@@ -12,11 +12,7 @@ export const Wrapper: FC<WrapperProps> = ({ children, ...props }) => {
   const { webApp } = useTelegram()
 
   return (
-    <div
-      autoFocus
-      className={styles.wrapper}
-      style={{ ...props.style, height: webApp.viewportHeight }}
-    >
+    <div className={styles.wrapper} style={{ ...props.style, height: webApp.viewportHeight }}>
       {children}
     </div>
   )

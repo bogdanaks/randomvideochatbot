@@ -4,7 +4,7 @@ import { selectAppSettings } from "entities/user/model/slice"
 
 import { config } from "shared/config"
 import { getTestUserId } from "shared/lib/local-storage"
-import { getMockTgUser } from "shared/mock"
+import { getMockTgInitData, getMockTgUser } from "shared/mock"
 
 export interface Telegram {
   utils: TgWebUtils
@@ -22,11 +22,15 @@ export const useTelegram = () => {
       ? getMockTgUser(testUserId)
       : window.Telegram.WebApp.initDataUnsafe.user
 
+  const initData =
+    config.TEST_MODE && testUserId ? getMockTgInitData() : window.Telegram.WebApp.initData
+
   const telegram = {
     utils: window.Telegram.Utils,
     webApp: window.Telegram.WebApp,
     webView: window.Telegram.WebView,
     user,
+    initData,
     haptic: {
       impactOccurred: window.Telegram.WebApp.HapticFeedback.impactOccurred,
       notificationOccurred: window.Telegram.WebApp.HapticFeedback.notificationOccurred,

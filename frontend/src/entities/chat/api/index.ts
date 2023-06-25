@@ -12,13 +12,13 @@ export const chatApi = createApi({
     sendMessage: builder.mutation<ChatMessage, NewChatMessage>({
       queryFn: (newSendMessage) => {
         return new Promise((resolve) => {
-          socket.emit(
-            SoketEvents.MessageAdd,
-            newSendMessage,
-            (response: { message: ChatMessage }) => {
-              resolve({ data: response.message })
-            }
-          )
+          // socket.emit(
+          //   SoketEvents.MessageAdd,
+          //   newSendMessage,
+          //   (response: { message: ChatMessage }) => {
+          //     resolve({ data: response.message })
+          //   }
+          // )
         })
       },
     }),
