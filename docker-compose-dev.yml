@@ -61,7 +61,7 @@ services:
       - "/app/node_modules"
     environment:
       - REACT_APP_API_URL=https://bogdanaks.ru
-      - REACT_APP_TEST_MODE=false
+      - REACT_APP_TEST_MODE=true
       - REACT_APP_PEER_HOST=https://bogdanaks.ru
       - REACT_APP_PEER_PORT=9000
     restart: always
