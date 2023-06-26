@@ -4,3 +4,5 @@ build
 .env
 dump.rdb
 nginx
+pg-data
+redis_data
