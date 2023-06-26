@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { Socket } from "socket.io-client"
 
 import { useAppDispatch } from "app/hooks"
@@ -11,6 +11,7 @@ import { useTelegram } from "entities/telegram/model"
 const SocketProvider = () => {
   const { user: tgUser, initData } = useTelegram()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const socketConnected = useRef<Socket | null>(null)
 
   useEffect(() => {
@@ -35,9 +36,17 @@ const SocketProvider = () => {
 
         socketConnected.current.emit(SoketEvents.GetRandomUser, (peerId: string) => {
           console.log("peerId", peerId)
+          // Если peerId null, то значит я и есть пользователь в поиске
+          // А если есть, то соединяемся по пирам, отправляю звонок
           // dispatch(setInit(initState))
         })
       }, 500)
+    })
+
+    socketConnected.current.on("connect_error", (err) => {
+      if (err.message === "User not found") {
+        navigate("/sign-in")
+      }
     })
 
     // ROOMS

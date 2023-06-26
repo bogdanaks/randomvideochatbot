@@ -26,7 +26,13 @@ export class IoConnector {
   }
 
   async connect() {
-    this.authIo()
+    try {
+      this.authIo()
+    } catch (err) {
+      console.log("Err socket auth", err)
+      return
+    }
+
     this.io.on(SocketEvents.Connection, async (socket) => {
       await this.socketController.connect(socket as unknown as SocketType)
     })
@@ -45,12 +51,13 @@ export class IoConnector {
 
       if (isValid) {
         const userData = await this.userController.getUserById(user.id)
+        console.log("userData", userData)
         if (!userData) {
-          // await this.userController.saveUser(user)
+          next(new Error("User not found"))
+          return
         }
 
-        // TODO тут в сокет подставлять полную сущность юзера
-        socket.data.user = user
+        socket.data.user = userData
         next()
       } else {
         next(new Error("invalid socket auth"))

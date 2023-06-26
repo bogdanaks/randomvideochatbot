@@ -17,6 +17,15 @@ export class UserEntity {
   @Column()
   is_premium: boolean
 
+  @Column()
+  age: number
+
+  @Column()
+  gender: "M" | "W"
+
+  @Column()
+  username: string
+
   @CreateDateColumn()
   created_at: string
 

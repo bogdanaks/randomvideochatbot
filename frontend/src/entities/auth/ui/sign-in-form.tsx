@@ -1,5 +1,4 @@
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 
 import { useTelegram } from "entities/telegram/model"
 
@@ -14,7 +13,6 @@ export const SignInForm = () => {
   const { register, handleSubmit } = useForm<SignInFormData>()
   const [signIn, { isLoading }] = useSignInMutation()
   const { user } = useTelegram()
-  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     // TODO VALIDATION
@@ -24,7 +22,6 @@ export const SignInForm = () => {
         gender: data.gender,
         age: data.age,
       }).unwrap()
-      navigate("/")
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log("err", err)
@@ -74,7 +71,7 @@ export const SignInForm = () => {
         type="submit"
         className="w-full mt-8 text-white bg-rose-500 hover:bg-rose-600 focus:ring-4 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-base px-6 py-3.5 text-center"
       >
-        {!isLoading ? "Начать игру" : "Загрузка.."}
+        {!isLoading ? "Продолжить" : "Загрузка.."}
       </button>
     </form>
   )

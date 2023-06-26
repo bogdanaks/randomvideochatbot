@@ -24,7 +24,8 @@ export class UserController {
 
     const user = await this.userService.getUserById(userId)
     if (!user) {
-      throw new Error("user not found")
+      console.log(`User not found: ${userId}`)
+      return null
     }
 
     await this.redisService.saveUser(user)

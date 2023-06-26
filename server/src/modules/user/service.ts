@@ -1,4 +1,4 @@
-import { TgUser } from "@/common/types"
+import { TgUser, TgUserSignIn } from "@/common/types"
 import { TelegramService } from "../telegram/service"
 import { RedisService } from "../redis/service"
 import { UserEntity } from "./user.entity"
@@ -32,7 +32,7 @@ export class UserService {
   //   return cachedUsers
   // }
 
-  async saveUser(user: UserEntity) {
+  async saveUser(user: TgUserSignIn) {
     await this.userRepository.save(user)
   }
 }

@@ -13,6 +13,7 @@ import { Server } from "socket.io"
 import { asValue } from "awilix"
 import cors from "cors"
 import path from "path"
+import routes from "./modules"
 
 export const app: Express = express()
 export const router: Router = express.Router()
@@ -41,7 +42,7 @@ AppDataSource.initialize()
     )
     app.use(scopePerRequest(DI))
     app.use(express.json())
-    // app.use("/api/v1", routes)
+    app.use("/api/v1", routes)
 
     app.get(
       "/api/v1/status",

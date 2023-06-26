@@ -16,6 +16,11 @@ export interface TgUser {
   username?: string
 }
 
+export interface TgUserSignIn extends TgUser {
+  age: number
+  gender: "M" | "W"
+}
+
 export interface RoomsType {
   [roomId: string]: string[]
 }
