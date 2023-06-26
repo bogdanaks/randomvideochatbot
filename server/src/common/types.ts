@@ -36,3 +36,8 @@ export type SocketType = Omit<SocketTypeInit, "handshake"> & {
 } & { data: { user: TgUser } }
 
 export type IoType = Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
+
+export interface Country {
+  code: string
+  title: string
+}

@@ -45,13 +45,14 @@ export class IoConnector {
     this.io.use(async (socketCon, next) => {
       const socket = socketCon as unknown as SocketType
       const initData = socket.handshake.auth.initData
-      const isValid = this.tgService.verifyInitData(initData)
+      // const isValid = this.tgService.verifyInitData(initData)
       const initDataParse = new URLSearchParams(initData)
       const user: TgUser = JSON.parse(initDataParse.get("user") || "{}")
 
+      const isValid = true // TODO dev mode
+
       if (isValid) {
         const userData = await this.userController.getUserById(user.id)
-        console.log("userData", userData)
         if (!userData) {
           next(new Error("User not found"))
           return

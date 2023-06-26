@@ -23,7 +23,7 @@ export const useTelegram = () => {
       : window.Telegram.WebApp.initDataUnsafe.user
 
   const initData =
-    config.TEST_MODE && testUserId ? getMockTgInitData() : window.Telegram.WebApp.initData
+    config.TEST_MODE && testUserId ? getMockTgInitData(testUserId) : window.Telegram.WebApp.initData
 
   const telegram = {
     utils: window.Telegram.Utils,

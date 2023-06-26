@@ -17,6 +17,7 @@ import { chatApi } from "entities/chat/api"
 import { chatReducer } from "entities/chat/model/slice"
 import { consoleAlertReducer } from "entities/console-alert/model/slice"
 import { userReducer } from "entities/user/model/slice"
+import { videoChatReducer } from "entities/video-chat/model/slice"
 
 const persistConfig = {
   key: "root",
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   chat: chatReducer,
   auth: authReducer,
   user: userReducer,
+  videoChat: videoChatReducer,
   [authApi.reducerPath]: authApi.reducer,
   [chatApi.reducerPath]: chatApi.reducer,
 })

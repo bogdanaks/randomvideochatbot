@@ -1,53 +1,41 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
-import { Socket } from "socket.io-client"
 
-import { useAppDispatch } from "app/hooks"
-
-import { SoketEvents } from "entities/chat/model/enums"
 import { setSocket, socket } from "entities/chat/model/socket"
 import { useTelegram } from "entities/telegram/model"
 
 const SocketProvider = () => {
   const { user: tgUser, initData } = useTelegram()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const socketConnected = useRef<Socket | null>(null)
+  const [isConnected, setIsConnected] = useState(socket?.connected || false)
+
+  const handleDisconnect = () => {
+    setIsConnected(false)
+  }
+
+  const handleConnectError = (err: Error) => {
+    console.log("handleConnectError", err.message)
+    if (err.message === "User not found") {
+      navigate("/sign-in")
+    }
+  }
 
   useEffect(() => {
-    if (!initData) return
-
-    const socketCon = !socket ? setSocket(initData) : socket
-    socketConnected.current = socketCon
+    if (!initData || socket) return
+    setSocket(initData)
   }, [initData])
 
   useEffect(() => {
-    if (!socketConnected.current || !tgUser?.id) return
-    let timerGetRandomUser: NodeJS.Timeout
+    if (!socket || !tgUser?.id) return
 
-    socketConnected.current.on("connect", () => {
-      if (!socketConnected.current) return
+    socket.on("connect", () => {
+      setIsConnected(true)
 
       // eslint-disable-next-line no-console
-      console.log("Socket connect", socketConnected.current.id)
-
-      timerGetRandomUser = setTimeout(() => {
-        if (!socketConnected.current) return
-
-        socketConnected.current.emit(SoketEvents.GetRandomUser, (peerId: string) => {
-          console.log("peerId", peerId)
-          // Если peerId null, то значит я и есть пользователь в поиске
-          // А если есть, то соединяемся по пирам, отправляю звонок
-          // dispatch(setInit(initState))
-        })
-      }, 500)
+      console.log("Socket connect", socket.id)
     })
 
-    socketConnected.current.on("connect_error", (err) => {
-      if (err.message === "User not found") {
-        navigate("/sign-in")
-      }
-    })
+    socket.on("connect_error", handleConnectError)
 
     // ROOMS
     // socketConnected.on(SoketEvents.RoomUpdate, (roomId: string) => {
@@ -60,16 +48,24 @@ const SocketProvider = () => {
     //   dispatch(leaveUser(user_id))
     // })
 
-    socketConnected.current.connect()
+    socket.connect()
 
     return () => {
-      socketConnected.current?.removeAllListeners()
-      socketConnected.current = null
-      clearTimeout(timerGetRandomUser)
+      socket.removeAllListeners()
+      handleDisconnect()
+      socket.disconnect()
     }
-  }, [socketConnected, tgUser])
+  }, [tgUser])
 
-  return socketConnected.current ? <Outlet /> : null
+  return isConnected ? (
+    <Outlet />
+  ) : (
+    <div
+      style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}
+    >
+      Socket is not connected
+    </div>
+  )
 }
 
 export default SocketProvider

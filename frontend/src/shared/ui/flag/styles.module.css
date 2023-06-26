@@ -1,0 +1,11 @@
+.flag {
+  display: inline-block;
+  border-radius: 100%;
+  overflow: hidden;
+  margin-right: 6px;
+}
+
+.flag img {
+  width: 100%;
+  height: 100%;
+}
