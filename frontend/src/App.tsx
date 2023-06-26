@@ -1,3 +1,4 @@
+import "flag-icons/css/flag-icons.min.css"
 import { PeerProvider } from "processes/peer-provider"
 import SocketProvider from "processes/socket-provider"
 import TelegramProvider from "processes/telegram-provider"
@@ -10,7 +11,6 @@ import "shared/styles/globals.css"
 import "shared/styles/tailwind.css"
 
 import MainPage from "./pages/main"
-import "/node_modules/flag-icons/css/flag-icons.min.css"
 
 const App: FC = () => {
   return (
