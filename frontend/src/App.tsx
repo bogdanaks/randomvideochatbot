@@ -1,4 +1,3 @@
-import "flag-icons/css/flag-icons.min.css"
 import { PeerProvider } from "processes/peer-provider"
 import SocketProvider from "processes/socket-provider"
 import TelegramProvider from "processes/telegram-provider"

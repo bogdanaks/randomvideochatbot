@@ -9,7 +9,7 @@ export const Flag = ({ country, size = 22 }: FlagProps) => {
   return (
     <div className={styles.flag} style={{ width: size, height: size }}>
       <img
-        alt="Russia"
+        alt={country}
         src={`http://purecatamphetamine.github.io/country-flag-icons/1x1/${country}.svg`}
       />
     </div>
