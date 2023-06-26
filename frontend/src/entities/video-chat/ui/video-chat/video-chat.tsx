@@ -1,5 +1,5 @@
 import { PeerContext } from "processes/peer-provider"
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import { SettingsChat } from "../settings-chat"
 import styles from "./styles.module.css"
@@ -7,7 +7,7 @@ import styles from "./styles.module.css"
 export const VideoChat: React.FC = () => {
   const { peer, myVideoRef, peerVideoRef, recipientPeerId, setRecipientPeerId } =
     useContext(PeerContext)
-
+  const [strLog, setStrLog] = useState("")
   useEffect(() => {
     if (!myVideoRef?.current) return
     ;(async () => {
@@ -19,10 +19,14 @@ export const VideoChat: React.FC = () => {
       if (myVideoRef.current) {
         myVideoRef.current.srcObject = stream
         myVideoRef.current.playsInline = true
+        await myVideoRef.current.play()
       }
 
+      setStrLog("tyt1")
+      console.log("peer", peer)
       // Прием вызова от другого участника
       peer.on("call", (call) => {
+        setStrLog("tyt2")
         const callRecipientPeerId = call.metadata.peerId
 
         call.answer(stream)
@@ -36,6 +40,8 @@ export const VideoChat: React.FC = () => {
               !peerVideoRef.current.paused &&
               !peerVideoRef.current.ended &&
               peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
+
+            setStrLog("tyt")
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(callRecipientPeerId)
             }
@@ -51,6 +57,9 @@ export const VideoChat: React.FC = () => {
 
   return (
     <div className={styles.videos}>
+      <span style={{ zIndex: 999 }}>
+        {strLog} - {peer.id}
+      </span>
       {!recipientPeerId && <SettingsChat />}
       <video
         className={styles.video2}

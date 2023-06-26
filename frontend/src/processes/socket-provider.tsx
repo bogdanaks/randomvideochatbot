@@ -8,6 +8,7 @@ const SocketProvider = () => {
   const { user: tgUser, initData } = useTelegram()
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(socket?.connected || false)
+  const [logStr, setLogStr] = useState("")
 
   const handleDisconnect = () => {
     setIsConnected(false)
@@ -15,6 +16,7 @@ const SocketProvider = () => {
 
   const handleConnectError = (err: Error) => {
     console.log("handleConnectError", err.message)
+    setLogStr(String(err.message))
     if (err.message === "User not found") {
       navigate("/sign-in")
     }
@@ -26,9 +28,11 @@ const SocketProvider = () => {
   }, [initData])
 
   useEffect(() => {
+    console.log("tgUser", tgUser)
     if (!socket || !tgUser?.id) return
 
     socket.on("connect", () => {
+      setLogStr("connect")
       setIsConnected(true)
 
       // eslint-disable-next-line no-console
@@ -63,7 +67,7 @@ const SocketProvider = () => {
     <div
       style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}
     >
-      Socket is not connected
+      Socket is not connected Tg: {tgUser?.id} {logStr}
     </div>
   )
 }
