@@ -67,6 +67,17 @@ AppDataSource.initialize()
       }
     )
 
+    app.get(
+      "/rvc",
+      (req, res, next) => {
+        console.log("the response will be sent by the next function ...")
+        next()
+      },
+      function (req, res) {
+        res.send("RVC!")
+      }
+    )
+
     DI.register({
       io: asValue(io),
     })
