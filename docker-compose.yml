@@ -69,11 +69,11 @@ services:
       - PORT=5000
       - DB_USER=postgres
       - DB_HOST=database
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
       - DB_NAME=randomvideochat
       - DB_PASSWORD=postgres
       - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - TG_TOKEN=5972839269:AAG5vsu9Vfc_C44ZC04T8j5LM2UeLbhJfWc
       - SSL_KEY_PATH=./ssl/privkey.pem
       - SSL_CERT_PATH=./ssl/fullchain.pem
