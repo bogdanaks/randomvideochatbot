@@ -31,7 +31,7 @@ export const PeerProvider = () => {
   const peer = new Peer(String(user.id), {
     host: config.PEER_HOST,
     port: config.PEER_PORT,
-    secure: false,
+    secure: true,
     path: "/",
   })
 
