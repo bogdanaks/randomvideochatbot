@@ -30,7 +30,6 @@ export const PeerProvider = () => {
 
   const peer = new Peer(String(user.id), {
     host: config.PEER_HOST,
-    port: config.PEER_PORT,
     path: "/rvc",
     debug: 3,
     secure: true,
