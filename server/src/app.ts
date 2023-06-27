@@ -17,16 +17,16 @@ import path from "path"
 import fs from "fs"
 import routes from "./modules"
 
-export const peerServer = PeerServer({
-  port: appConfig.peerPort,
-  path: appConfig.peerPath,
-  key: appConfig.peerKey,
-  proxied: true,
-  ssl: {
-    key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
-    cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
-  },
-})
+// export const peerServer = PeerServer({
+//   port: appConfig.peerPort,
+//   path: appConfig.peerPath,
+//   key: appConfig.peerKey,
+//   proxied: true,
+//   ssl: {
+//     key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
+//     cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
+//   },
+// })
 export const app: Express = express()
 export const router: Router = express.Router()
 export const server = createServer(app)
@@ -76,13 +76,13 @@ AppDataSource.initialize()
       console.log(`App run on port ${port} :)`)
     })
 
-    peerServer.on("connection", (client) => {
-      console.log("Peer Server connect client:", client.getId())
-    })
+    // peerServer.on("connection", (client) => {
+    //   console.log("Peer Server connect client:", client.getId())
+    // })
 
-    peerServer.on("error", (err) => {
-      console.log("Peer Server error", err)
-    })
+    // peerServer.on("error", (err) => {
+    //   console.log("Peer Server error", err)
+    // })
   })
   .catch(async (err) => {
     console.error("Error initialization:", err)

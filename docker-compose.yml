@@ -2,11 +2,11 @@ version: "3.9"
 services:
   database:
     container_name: rvc_database
-    image: "postgres:latest"
+    image: postgres:latest
     volumes:
-      - ./pg-data:/var/lib/postgresql/data
+      - ./data/pg:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5435:5432"
     environment:
       - POSTGRES_DB=randomvideochat
       - POSTGRES_USER=postgres
@@ -25,17 +25,33 @@ services:
     container_name: rvc_redis
     image: redis:alpine
     volumes:
-      - "./redis_data:/data"
+      - "./data/redis:/data"
     command: redis-server
     ports:
       - "6379:6379"
     restart: always
     networks:
       - app_network
+  peer_server:
+    container_name: rvc_peer_server
+    depends_on:
+      - redis
+      - database
+      - server
+    ports:
+      - "9000:9000"
+    build:
+      context: ./peer-server
+      dockerfile: Dockerfile
+    volumes:
+      - "./peer-server:/app"
+      - "/app/node_modules"
+    restart: always
+    networks:
+      - app_network
   client:
     container_name: rvc_client
     ports:
-      - "3000:3000"
       - "80:80"
       - "443:443"
     depends_on:
@@ -50,7 +66,8 @@ services:
       - REACT_APP_API_URL=https://bogdanaks.ru
       - REACT_APP_TEST_MODE=true
       - REACT_APP_PEER_HOST=https://bogdanaks.ru
-      - REACT_APP_PEER_PORT=9000
+      - REACT_APP_PEER_PORT=443
+      - REACT_APP_PEER_PATH="/rvc"
     restart: always
     networks:
       - app_network
@@ -78,11 +95,10 @@ services:
       - SSL_KEY_PATH=./ssl/privkey.pem
       - SSL_CERT_PATH=./ssl/fullchain.pem
       - PEER_PORT=9000
-      - PEER_PATH="/"
+      - PEER_PATH="/rvc"
       - PEER_KEY="peerjs"
     ports:
       - "5000:5000"
-      - "9000:9000"
     restart: always
     networks:
       - app_network
