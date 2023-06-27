@@ -90,8 +90,12 @@ services:
       - TG_TOKEN=5972839269:AAG5vsu9Vfc_C44ZC04T8j5LM2UeLbhJfWc
       - SSL_KEY_PATH=./ssl/privkey.pem
       - SSL_CERT_PATH=./ssl/fullchain.pem
+      - PEER_PORT=9000
+      - PEER_PATH="/"
+      - PEER_KEY="peerjs"
     ports:
       - "5000:5000"
+      - "9000:9000"
     restart: always
     networks:
       - app_network
