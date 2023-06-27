@@ -75,8 +75,8 @@ AppDataSource.initialize()
       console.log(`App run on port ${port} :)`)
     })
 
-    peerServer.on("connection", () => {
-      console.log("Peer Server connection")
+    peerServer.on("connection", (client) => {
+      console.log("Peer Server connect client:", client.getId())
     })
 
     peerServer.on("error", (err) => {
