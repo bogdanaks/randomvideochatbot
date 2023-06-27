@@ -21,6 +21,7 @@ export const peerServer = PeerServer({
   port: appConfig.peerPort,
   path: appConfig.peerPath,
   key: appConfig.peerKey,
+  proxied: true,
   ssl: {
     key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
     cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
