@@ -2,6 +2,7 @@ import "reflect-metadata"
 import * as dotenv from "dotenv"
 dotenv.config()
 import { createServer } from "http"
+import { PeerServer } from "peer"
 
 import express, { Express, Router } from "express"
 
@@ -13,8 +14,18 @@ import { Server } from "socket.io"
 import { asValue } from "awilix"
 import cors from "cors"
 import path from "path"
+import fs from "fs"
 import routes from "./modules"
 
+export const peerServer = PeerServer({
+  port: appConfig.peerPort,
+  path: appConfig.peerPath,
+  key: appConfig.peerKey,
+  ssl: {
+    key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
+    cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
+  },
+})
 export const app: Express = express()
 export const router: Router = express.Router()
 export const server = createServer(app)
