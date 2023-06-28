@@ -2,7 +2,7 @@ import "reflect-metadata"
 import * as dotenv from "dotenv"
 dotenv.config()
 import { createServer } from "http"
-import { PeerServer } from "peer"
+import { ExpressPeerServer } from "peer"
 
 import express, { Express, Router } from "express"
 
@@ -17,16 +17,6 @@ import path from "path"
 import fs from "fs"
 import routes from "./modules"
 
-// export const peerServer = PeerServer({
-//   port: appConfig.peerPort,
-//   path: appConfig.peerPath,
-//   key: appConfig.peerKey,
-//   proxied: true,
-//   ssl: {
-//     key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
-//     cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
-//   },
-// })
 export const app: Express = express()
 export const router: Router = express.Router()
 export const server = createServer(app)
@@ -44,6 +34,8 @@ AppDataSource.initialize()
   .then(async () => {
     console.log("Database run on port 5432")
     const port: number = appConfig.port || 55555
+
+    app.enable("trust proxy")
 
     const route = path.join(__dirname, "../static")
     app.use(express.static(route))
@@ -86,6 +78,17 @@ AppDataSource.initialize()
     server.listen(port, () => {
       console.log(`App run on port ${port} :)`)
     })
+
+    const peerServer = ExpressPeerServer(server, {
+      path: "/",
+      key: appConfig.peerKey,
+      proxied: true,
+      ssl: {
+        key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
+        cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
+      },
+    })
+    app.use("/peerjs", peerServer)
 
     // peerServer.on("connection", (client) => {
     //   console.log("Peer Server connect client:", client.getId())
