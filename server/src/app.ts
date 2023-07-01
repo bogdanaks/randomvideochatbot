@@ -16,10 +16,15 @@ import cors from "cors"
 import path from "path"
 import fs from "fs"
 import routes from "./modules"
+import { ServerOptions } from "https"
+
+const privateKey = fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString()
+const certificate = fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString()
+const credentials: ServerOptions = { key: privateKey, cert: certificate }
 
 export const app: Express = express()
 export const router: Router = express.Router()
-export const server = createServer(app)
+export const server = createServer(credentials, app)
 export const io = new Server(server, {
   connectionStateRecovery: {
     maxDisconnectionDuration: 60 * 1000, // 1min
@@ -83,10 +88,6 @@ AppDataSource.initialize()
       path: "/",
       key: appConfig.peerKey,
       proxied: true,
-      ssl: {
-        key: fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString(),
-        cert: fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString(),
-      },
     })
     app.use("/peerjs", peerServer)
 
