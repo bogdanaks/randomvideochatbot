@@ -22,11 +22,9 @@ export const VideoChat: React.FC = () => {
         await myVideoRef.current.play()
       }
 
-      setStrLog("tyt1")
       console.log("peer", peer)
       // Прием вызова от другого участника
       peer.on("call", (call) => {
-        setStrLog("tyt2")
         const callRecipientPeerId = call.metadata.peerId
 
         call.answer(stream)
@@ -41,7 +39,7 @@ export const VideoChat: React.FC = () => {
               !peerVideoRef.current.ended &&
               peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
 
-            setStrLog("tyt")
+            setStrLog(`isPlaying: ${isPlaying}`)
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(callRecipientPeerId)
             }

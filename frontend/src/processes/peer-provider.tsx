@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom"
 
 import { useTelegram } from "entities/telegram/model"
 
-import { config } from "shared/config"
+import { peerConfig } from "shared/config/peer-config"
 
 interface PeerContextProps {
   peer: Peer
@@ -28,14 +28,7 @@ export const PeerProvider = () => {
   const myVideoRef = useRef<HTMLVideoElement>(null)
   const peerVideoRef = useRef<HTMLVideoElement>(null)
 
-  const peer = new Peer(String(user.id), {
-    host: config.PEER_HOST,
-    path: "/peerjs",
-    port: 443,
-    key: "rvc",
-    debug: 3,
-    secure: true,
-  })
+  const peer = new Peer(String(user.id), peerConfig)
 
   useEffect(() => {
     peer.on("open", () => {

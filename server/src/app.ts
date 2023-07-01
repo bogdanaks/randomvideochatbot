@@ -14,12 +14,8 @@ import { Server } from "socket.io"
 import { asValue } from "awilix"
 import cors from "cors"
 import path from "path"
-import fs from "fs"
 import routes from "./modules"
-
-const privateKey = fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString()
-const certificate = fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString()
-const credentials = { key: privateKey, cert: certificate }
+import { getPeerServerConfig } from "./modules/peer-server"
 
 export const app: Express = express()
 export const router: Router = express.Router()
@@ -83,16 +79,8 @@ AppDataSource.initialize()
       console.log(`App run on port ${port} :)`)
     })
 
-    const peerServer = PeerServer({
-      port: 9000,
-      key: "rvc",
-      path: "/peerjs",
-      proxied: true,
-      corsOptions: {
-        origin: "*",
-      },
-      ssl: credentials,
-    })
+    const peerConfig = getPeerServerConfig()
+    const peerServer = PeerServer(peerConfig)
 
     peerServer.on("connection", (client) => {
       console.log("Peer Server connect client:", client.getId())
