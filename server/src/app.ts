@@ -2,7 +2,7 @@ import "reflect-metadata"
 import * as dotenv from "dotenv"
 dotenv.config()
 import { createServer } from "http"
-import { ExpressPeerServer } from "peer"
+import { PeerServer } from "peer"
 
 import express, { Express, Router } from "express"
 
@@ -24,7 +24,7 @@ const credentials: ServerOptions = { key: privateKey, cert: certificate }
 
 export const app: Express = express()
 export const router: Router = express.Router()
-export const server = createServer(credentials, app)
+export const server = createServer(app)
 export const io = new Server(server, {
   connectionStateRecovery: {
     maxDisconnectionDuration: 60 * 1000, // 1min
@@ -33,6 +33,14 @@ export const io = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
+})
+export const peerServer = PeerServer({
+  port: 9000,
+  key: appConfig.peerKey,
+  // ssl: {
+  // 	key: fs.readFileSync("/path/to/your/ssl/key/here.key"),
+  // 	cert: fs.readFileSync("/path/to/your/ssl/certificate/here.crt"),
+  // },
 })
 
 AppDataSource.initialize()
@@ -84,12 +92,13 @@ AppDataSource.initialize()
       console.log(`App run on port ${port} :)`)
     })
 
-    const peerServer = ExpressPeerServer(server, {
-      path: "/",
-      key: appConfig.peerKey,
-      proxied: true,
-    })
-    app.use("/peerjs", peerServer)
+    // const peerServer = ExpressPeerServer(server, {
+    //   path: "/",
+    //   key: appConfig.peerKey,
+    //   // proxied: true,
+    //   // port: 443,
+    // })
+    // app.use("/peerjs", peerServer)
 
     // peerServer.on("connection", (client) => {
     //   console.log("Peer Server connect client:", client.getId())
