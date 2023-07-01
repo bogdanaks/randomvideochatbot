@@ -32,9 +32,11 @@ export const PeerProvider = () => {
 
   useEffect(() => {
     peer.on("open", () => {
+      // eslint-disable-next-line no-console
       console.log("Peer успешно инициализирован", peer.id)
     })
     peer.on("error", (error) => {
+      // eslint-disable-next-line no-console
       console.log("Обработка ошибки инициализации Peer", error)
     })
 

@@ -15,7 +15,6 @@ const SocketProvider = () => {
   }
 
   const handleConnectError = (err: Error) => {
-    console.log("handleConnectError", err.message)
     setLogStr(String(err.message))
     if (err.message === "User not found") {
       navigate("/sign-in")
@@ -28,7 +27,6 @@ const SocketProvider = () => {
   }, [initData])
 
   useEffect(() => {
-    console.log("tgUser", tgUser)
     if (!socket || !tgUser?.id) return
 
     socket.on("connect", () => {

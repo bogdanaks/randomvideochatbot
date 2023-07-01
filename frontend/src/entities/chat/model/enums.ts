@@ -1,3 +1,3 @@
 export enum SoketEvents {
-  GetRandomUser = "getRandomUser",
+  SearchUser = "searchUser",
 }

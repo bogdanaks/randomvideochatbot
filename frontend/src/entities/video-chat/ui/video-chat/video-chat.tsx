@@ -1,6 +1,13 @@
 import { PeerContext } from "processes/peer-provider"
 import React, { useContext, useEffect, useState } from "react"
 
+import { useAppSelector } from "app/hooks"
+
+import { selectVideoChat } from "entities/video-chat/model/slice"
+
+import { Loader } from "shared/ui/loader"
+
+import { Searching } from "../searching"
 import { SettingsChat } from "../settings-chat"
 import styles from "./styles.module.css"
 
@@ -8,6 +15,8 @@ export const VideoChat: React.FC = () => {
   const { peer, myVideoRef, peerVideoRef, recipientPeerId, setRecipientPeerId } =
     useContext(PeerContext)
   const [strLog, setStrLog] = useState("")
+  const videoChat = useAppSelector(selectVideoChat)
+
   useEffect(() => {
     if (!myVideoRef?.current) return
     ;(async () => {
@@ -22,7 +31,6 @@ export const VideoChat: React.FC = () => {
         await myVideoRef.current.play()
       }
 
-      console.log("peer", peer)
       // Прием вызова от другого участника
       peer.on("call", (call) => {
         const callRecipientPeerId = call.metadata.peerId
@@ -55,17 +63,15 @@ export const VideoChat: React.FC = () => {
 
   return (
     <div className={styles.videos}>
-      <span style={{ zIndex: 999 }}>
-        {strLog} - {peer.id} - {recipientPeerId}
-      </span>
-      {!recipientPeerId && <SettingsChat />}
+      {videoChat.isSearching && <Searching />}
+      {!recipientPeerId && !videoChat.isSearching && <SettingsChat />}
       <video
         className={styles.video2}
         id="another"
         ref={peerVideoRef}
         autoPlay
         playsInline
-        style={{ display: !recipientPeerId ? "none" : "block" }}
+        style={{ display: videoChat.isSearching || !recipientPeerId ? "none" : "block" }}
       />
       <video className={styles.video1} id="my" ref={myVideoRef} muted autoPlay playsInline />
     </div>

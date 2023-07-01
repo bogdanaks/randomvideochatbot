@@ -2,9 +2,12 @@ import { MediaConnection } from "peerjs"
 import { PeerContext } from "processes/peer-provider"
 import { useContext, useEffect, useState } from "react"
 
+import { useAppDispatch } from "app/hooks"
+
 import { SoketEvents } from "entities/chat/model/enums"
 import { socket } from "entities/chat/model/socket"
 import { useTelegram } from "entities/telegram/model"
+import { setIsSearching } from "entities/video-chat/model/slice"
 
 import GlobeImg from "shared/assets/globe.png"
 import NoizeImg from "shared/assets/noize.jpg"
@@ -23,6 +26,7 @@ export const SettingsChat = () => {
   const { peer, peerVideoRef, setRecipientPeerId } = useContext(PeerContext)
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
   const [isCountryVisible, setIsCountryVisible] = useState(false)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (!user) return
@@ -45,19 +49,20 @@ export const SettingsChat = () => {
   // TODO dublicate
   function checkMediaConnection(connection: MediaConnection) {
     connection.on("stream", () => {
-      // Соединение установлено успешно
+      // eslint-disable-next-line no-console
       console.log("Соединение установлено!")
       // Выполните здесь действия, которые вы хотите выполнить при успешном соединении
     })
 
     connection.on("close", () => {
-      // Соединение закрыто
+      // eslint-disable-next-line no-console
       console.log("Соединение закрыто!")
       // Выполните здесь действия, которые вы хотите выполнить при закрытии соединения
     })
 
     connection.on("error", (error) => {
       // Ошибка соединения
+      // eslint-disable-next-line no-console
       console.log("Ошибка соединения:", error)
       // Выполните здесь действия, которые вы хотите выполнить при ошибке соединения
     })
@@ -92,6 +97,7 @@ export const SettingsChat = () => {
               peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(peerCallId)
+              dispatch(setIsSearching(false))
             }
           }
         })
@@ -101,19 +107,18 @@ export const SettingsChat = () => {
       })
   }
 
-  const handleGetRandomUser = (peerId: string | null) => {
+  const handleSearchUser = (peerId: string | null) => {
     if (peerId) {
-      console.log("peerId is value", peerId)
       handleCall(peerId)
       return
+    } else {
+      dispatch(setIsSearching(true))
     }
-
-    console.log("peerId is null", peerId)
   }
 
   const handleSearchClick = () => {
     setIsCountryVisible(false)
-    socket.emit(SoketEvents.GetRandomUser, selectedCountry, handleGetRandomUser)
+    socket.emit(SoketEvents.SearchUser, selectedCountry, handleSearchUser)
   }
 
   return (

@@ -2,7 +2,7 @@ import { Redis } from "ioredis"
 
 import { UserEntity } from "../user"
 import { appConfig } from "@/config"
-import { TgUser } from "@/common/types"
+import { Country } from "@/common/types"
 
 export class RedisService {
   protected pubClient
@@ -28,11 +28,16 @@ export class RedisService {
     await this.pubClient.set(`users:${user.id}`, JSON.stringify(user), "EX", 3600)
   }
 
-  async setUserWait(userId: string) {
-    await this.pubClient.set("waitUser", userId)
+  async getRandomUserByCountry(country: Country | null) {
+    const countryKey = country ? `country:${country.code}` : "country:all"
+    const user = await this.subClient.spop(`users:${countryKey}`)
+    console.log("user", user)
+    return user
   }
 
-  async getUserWait() {
-    return await this.pubClient.get("waitUser")
+  async addUserToWaitList(userId: string, country: Country | null) {
+    const countryKey = country ? `country:${country.code}` : "country:all"
+    console.log("countryKey", countryKey)
+    await this.pubClient.sadd(`users:${countryKey}`, userId)
   }
 }

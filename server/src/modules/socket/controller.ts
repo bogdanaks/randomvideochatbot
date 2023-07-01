@@ -19,8 +19,8 @@ export class SocketController {
   }
 
   async listeners(socket: SocketType) {
-    socket.on(SocketEvents.GetRandomUser, (selectedCountry, resolve) =>
-      this.onGetRandomUser(resolve, socket.data.user.id, selectedCountry)
+    socket.on(SocketEvents.SearchUser, (selectedCountry, resolve) =>
+      this.onSearchUser(resolve, socket.data.user.id, selectedCountry)
     )
     socket.on(
       SocketEvents.Disconnect,
@@ -28,23 +28,31 @@ export class SocketController {
     )
   }
 
-  async onGetRandomUser(resolve: any, userId: string, selectedCountry: Country | null) {
-    const waitUser = await this.userController.getUserWait()
-
-    console.log("selectedCountry", selectedCountry)
-
-    if (!waitUser) {
-      await this.userController.setUserWait(userId)
+  async onSearchUser(resolve: any, userId: string, selectedCountry: Country | null) {
+    const user = await this.userController.searchFreeUser(selectedCountry)
+    if (!user) {
+      await this.userController.addUserToWaitList(userId, selectedCountry)
       resolve(null)
       return
     }
 
-    if (String(waitUser) === String(userId)) {
+    if (String(user) === String(userId)) {
       resolve(null)
       return
     }
 
-    resolve(waitUser)
+    resolve(user)
+
+    // if (!waitUser) {
+    //   await this.userController.setUserWait(userId)
+    //   resolve(null)
+    //   return
+    // }
+    // if (String(waitUser) === String(userId)) {
+    //   resolve(null)
+    //   return
+    // }
+    // resolve(waitUser)
   }
 
   async onDisconnect(userId: string) {

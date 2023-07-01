@@ -1,6 +1,7 @@
 import { UserService } from "./service"
 import { RedisService } from "../redis"
 import { UserEntity } from "./user.entity"
+import { Country } from "@/common/types"
 
 interface UserControllerProps {
   userService: UserService
@@ -37,11 +38,12 @@ export class UserController {
     await this.redisService.saveUser(user)
   }
 
-  async getUserWait() {
-    return await this.redisService.getUserWait()
+  async searchFreeUser(country: Country | null) {
+    const user = await this.redisService.getRandomUserByCountry(country)
+    return user
   }
 
-  async setUserWait(userId: string) {
-    await this.redisService.setUserWait(userId)
+  async addUserToWaitList(userId: string, country: Country | null) {
+    await this.redisService.addUserToWaitList(userId, country)
   }
 }
