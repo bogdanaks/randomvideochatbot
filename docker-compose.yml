@@ -32,23 +32,23 @@ services:
     restart: always
     networks:
       - app_network
-  peer_server:
-    container_name: rvc_peer_server
-    depends_on:
-      - redis
-      - database
-      - server
-    ports:
-      - "9000:9000"
-    build:
-      context: ./peer-server
-      dockerfile: Dockerfile
-    volumes:
-      - "./peer-server:/app"
-      - "/app/node_modules"
-    restart: always
-    networks:
-      - app_network
+  # peer_server:
+  #   container_name: rvc_peer_server
+  #   depends_on:
+  #     - redis
+  #     - database
+  #     - server
+  #   ports:
+  #     - "9000:9000"
+  #   build:
+  #     context: ./peer-server
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "./peer-server:/app"
+  #     - "/app/node_modules"
+  #   restart: always
+  #   networks:
+  #     - app_network
   client:
     container_name: rvc_client
     ports:
@@ -67,7 +67,7 @@ services:
       - REACT_APP_TEST_MODE=true
       - REACT_APP_PEER_HOST=https://bogdanaks.ru
       - REACT_APP_PEER_PORT=443
-      - REACT_APP_PEER_PATH="/rvc"
+      - REACT_APP_PEER_PATH="/peerjs"
     restart: always
     networks:
       - app_network
@@ -95,8 +95,8 @@ services:
       - SSL_KEY_PATH=./ssl/privkey.pem
       - SSL_CERT_PATH=./ssl/fullchain.pem
       - PEER_PORT=9000
-      - PEER_PATH="/rvc"
-      - PEER_KEY="peerjs"
+      - PEER_PATH="/peerjs"
+      - PEER_KEY="rvc"
     ports:
       - "5000:5000"
     restart: always
