@@ -33,7 +33,7 @@ export const PeerProvider = () => {
     path: "/",
     key: "rvc",
     debug: 3,
-    secure: false,
+    secure: true,
   })
 
   useEffect(() => {

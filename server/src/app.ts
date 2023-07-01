@@ -36,11 +36,12 @@ export const io = new Server(server, {
 })
 export const peerServer = PeerServer({
   port: 9000,
-  key: appConfig.peerKey,
-  // ssl: {
-  // 	key: fs.readFileSync("/path/to/your/ssl/key/here.key"),
-  // 	cert: fs.readFileSync("/path/to/your/ssl/certificate/here.crt"),
-  // },
+  key: "rvc",
+  path: "/peerjs",
+  ssl: {
+  	key: privateKey,
+  	cert: certificate,
+  },
 })
 
 AppDataSource.initialize()
