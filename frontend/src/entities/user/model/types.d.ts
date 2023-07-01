@@ -1,3 +1,3 @@
 interface UserState {
-  appSettings: AppSettingsLS
+  isVisibleSettings: boolean
 }

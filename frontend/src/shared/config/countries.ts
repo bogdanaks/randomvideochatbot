@@ -24,3 +24,7 @@ export const countries = [
     title: "China",
   },
 ]
+
+export const getCountryByCode = (code: string) => {
+  return countries.find((i) => i.code.toLowerCase() === code.toLowerCase())
+}

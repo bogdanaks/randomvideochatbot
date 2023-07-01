@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "app/hooks"
 import { selectVideoChat, setIsSearching } from "entities/video-chat/model/slice"
 
 import { Searching } from "../searching"
-import { SettingsChat } from "../settings-chat"
+import { SettingsSearch } from "../settings-chat"
 import styles from "./styles.module.css"
 
 export const VideoChat: React.FC = () => {
@@ -46,7 +46,6 @@ export const VideoChat: React.FC = () => {
               !peerVideoRef.current.ended &&
               peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
 
-            setStrLog(`isPlaying: ${isPlaying}`)
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(callRecipientPeerId)
               await peerVideoRef.current.play()
@@ -66,16 +65,15 @@ export const VideoChat: React.FC = () => {
     <div className={styles.videos}>
       <div className={styles.log}>{strLog}</div>
       {videoChat.isSearching && <Searching />}
-      {!recipientPeerId && !videoChat.isSearching && <SettingsChat />}
+      {!recipientPeerId && !videoChat.isSearching && <SettingsSearch />}
       <video
-        className={styles.video2}
         id="another"
         ref={peerVideoRef}
         autoPlay
         playsInline
         style={{ display: videoChat.isSearching || !recipientPeerId ? "none" : "block" }}
       />
-      <video className={styles.video1} id="my" ref={myVideoRef} muted autoPlay playsInline />
+      <video id="my" ref={myVideoRef} muted autoPlay playsInline />
     </div>
   )
 }

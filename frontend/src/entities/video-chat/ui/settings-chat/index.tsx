@@ -1,12 +1,14 @@
 import { MediaConnection } from "peerjs"
 import { PeerContext } from "processes/peer-provider"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
+import { HiOutlineCog8Tooth } from "react-icons/hi2"
 
 import { useAppDispatch } from "app/hooks"
 
 import { SoketEvents } from "entities/chat/model/enums"
 import { socket } from "entities/chat/model/socket"
-import { useTelegram } from "entities/telegram/model"
+import { setIsVisibleSettings } from "entities/user/model/slice"
+import { UserSettings } from "entities/user/ui/user-settings"
 import { setIsSearching } from "entities/video-chat/model/slice"
 
 import GlobeImg from "shared/assets/globe.png"
@@ -21,22 +23,11 @@ interface Country {
   title: string
 }
 
-export const SettingsChat = () => {
-  const { user } = useTelegram()
+export const SettingsSearch = () => {
   const { peer, peerVideoRef, setRecipientPeerId } = useContext(PeerContext)
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
   const [isCountryVisible, setIsCountryVisible] = useState(false)
   const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (!user) return
-    const findCountry = countries.find(
-      (i) => i.code.toLowerCase() === user.language_code.toLowerCase()
-    )
-    if (findCountry) {
-      setSelectedCountry(findCountry)
-    }
-  }, [user])
 
   const handleCountrySelect = () => {
     setIsCountryVisible(!isCountryVisible)
@@ -122,11 +113,19 @@ export const SettingsChat = () => {
     socket.emit(SoketEvents.SearchUser, selectedCountry, handleSearchUser)
   }
 
+  const handleSettingsClick = () => {
+    dispatch(setIsVisibleSettings(true))
+  }
+
   return (
     <div className={styles.wrapper}>
+      <UserSettings />
       <img className={styles.imgNoize} src={NoizeImg} alt="Noize" />
       <div className={styles.body}>
-        <h4 className={styles.online}>Онлайн: 123 412 пользов.</h4>
+        <h4 className={styles.online}>Онлайн: 100 пользов.</h4>
+        <div className={styles.settingsIcon} onClick={handleSettingsClick}>
+          <HiOutlineCog8Tooth size={24} />
+        </div>
       </div>
       <div className={styles.footer}>
         <div className="flex w-full relative">

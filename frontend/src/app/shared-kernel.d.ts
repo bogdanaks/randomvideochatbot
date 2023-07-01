@@ -137,5 +137,10 @@ type MainButtonParams = {
 }
 
 interface AppSettingsLS {
-  country: string
+  country: Country
+}
+
+interface Country {
+  code: string
+  title: string
 }
