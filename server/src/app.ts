@@ -20,7 +20,7 @@ import { ServerOptions } from "https"
 
 const privateKey = fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString()
 const certificate = fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString()
-const credentials: ServerOptions = { key: privateKey, cert: certificate }
+const credentials = { key: privateKey, cert: certificate }
 
 export const app: Express = express()
 export const router: Router = express.Router()
@@ -34,15 +34,7 @@ export const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 })
-export const peerServer = PeerServer({
-  port: 9000,
-  key: "rvc",
-  path: "/peerjs",
-  ssl: {
-  	key: privateKey,
-  	cert: certificate,
-  },
-})
+
 
 AppDataSource.initialize()
   .then(async () => {
@@ -93,21 +85,24 @@ AppDataSource.initialize()
       console.log(`App run on port ${port} :)`)
     })
 
-    // const peerServer = ExpressPeerServer(server, {
-    //   path: "/",
-    //   key: appConfig.peerKey,
-    //   // proxied: true,
-    //   // port: 443,
-    // })
-    // app.use("/peerjs", peerServer)
+    const peerServer = PeerServer({
+      port: 9000,
+      key: "rvc",
+      path: "/peerjs",
+      proxied: true,
+      corsOptions: {
+        origin: "*",
+      },
+      ssl: credentials,
+    })
 
-    // peerServer.on("connection", (client) => {
-    //   console.log("Peer Server connect client:", client.getId())
-    // })
+    peerServer.on("connection", (client) => {
+      console.log("Peer Server connect client:", client.getId())
+    })
 
-    // peerServer.on("error", (err) => {
-    //   console.log("Peer Server error", err)
-    // })
+    peerServer.on("error", (err) => {
+      console.log("Peer Server error", err)
+    })
   })
   .catch(async (err) => {
     console.error("Error initialization:", err)
