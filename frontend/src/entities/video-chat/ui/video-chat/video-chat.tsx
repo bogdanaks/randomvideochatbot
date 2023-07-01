@@ -67,7 +67,7 @@ export const VideoChat: React.FC = () => {
       {videoChat.isSearching && <Searching />}
       {!recipientPeerId && !videoChat.isSearching && <SettingsSearch />}
       <video
-        id="another"
+        id="peer"
         ref={peerVideoRef}
         autoPlay
         playsInline
