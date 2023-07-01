@@ -50,6 +50,7 @@ export const VideoChat: React.FC = () => {
             setStrLog(`isPlaying: ${isPlaying}`)
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(callRecipientPeerId)
+              await peerVideoRef.current.play()
             }
           }
         })
