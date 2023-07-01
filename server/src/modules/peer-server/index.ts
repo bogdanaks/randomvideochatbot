@@ -11,7 +11,7 @@ export const getPeerServerConfig = () => {
     }
   }
 
-  const privateKey = fs.readFileSync(path.join(__dirname, "../../../ssl/fullchain.pem")).toString()
+  const privateKey = fs.readFileSync(path.join(__dirname, "../../../ssl/privkey.pem")).toString()
   const certificate = fs.readFileSync(path.join(__dirname, "../../../ssl/fullchain.pem")).toString()
   const credentials = { key: privateKey, cert: certificate }
 
