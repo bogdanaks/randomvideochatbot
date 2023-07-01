@@ -97,6 +97,7 @@ export const SettingsChat = () => {
               peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(peerCallId)
+              await peerVideoRef.current.play()
               dispatch(setIsSearching(false))
             }
           }
