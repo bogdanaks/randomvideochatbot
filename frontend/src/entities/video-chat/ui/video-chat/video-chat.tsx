@@ -58,7 +58,7 @@ export const VideoChat: React.FC = () => {
   return (
     <div className={styles.videos}>
       <span style={{ zIndex: 999 }}>
-        {strLog} - {peer.id}
+        {strLog} - {peer.id} - {recipientPeerId}
       </span>
       {!recipientPeerId && <SettingsChat />}
       <video
