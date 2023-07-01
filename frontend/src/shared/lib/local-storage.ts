@@ -4,7 +4,7 @@ export const getTestUserId = () => {
 
 export const getAppSettings = () => {
   const appSettings = window.localStorage.getItem("appSettings")
-  return appSettings ? JSON.parse(appSettings) : null
+  return appSettings ? (JSON.parse(appSettings) as AppSettingsLS) : null
 }
 
 export const setAppSettings = (appSettings: AppSettingsLS) => {

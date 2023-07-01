@@ -102,8 +102,6 @@ interface UserEntity {
   photo_url: string
   gender: string
   age: number
-  position: number
-  hearts: number
 }
 
 interface TgWebView {
@@ -139,5 +137,5 @@ type MainButtonParams = {
 }
 
 interface AppSettingsLS {
-  hasVibration?: boolean
+  country: string
 }

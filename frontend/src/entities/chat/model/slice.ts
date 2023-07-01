@@ -54,15 +54,6 @@ export const chatSlice = createSlice({
     setUserPoses: (state, action: PayloadAction<{ [key: string]: UserPose }>) => {
       state.userPoses = { ...state.userPoses, ...action.payload }
     },
-    incrementUserHearts: (state, action: PayloadAction<string>) => {
-      const newUsers = state.users.map((user) => {
-        if (String(user.id) === action.payload) {
-          return { ...user, hearts: user.hearts + 1 }
-        }
-        return user
-      })
-      state.users = newUsers
-    },
     setUserDetails: (state, action: PayloadAction<UserEntity | null>) => {
       state.userDetails = action.payload
     },
@@ -81,7 +72,6 @@ export const {
   setLoading,
   setInit,
   setUserPoses,
-  incrementUserHearts,
   setUserDetails,
 } = chatSlice.actions
 

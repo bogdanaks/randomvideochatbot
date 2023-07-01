@@ -13,9 +13,7 @@ import storage from "redux-persist/lib/storage"
 
 import { authApi } from "entities/auth/api"
 import { authReducer } from "entities/auth/model/slice"
-import { chatApi } from "entities/chat/api"
 import { chatReducer } from "entities/chat/model/slice"
-import { consoleAlertReducer } from "entities/console-alert/model/slice"
 import { userReducer } from "entities/user/model/slice"
 import { videoChatReducer } from "entities/video-chat/model/slice"
 
@@ -26,13 +24,11 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  consoleAlert: consoleAlertReducer,
   chat: chatReducer,
   auth: authReducer,
   user: userReducer,
   videoChat: videoChatReducer,
   [authApi.reducerPath]: authApi.reducer,
-  [chatApi.reducerPath]: chatApi.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -44,9 +40,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    })
-      .concat(authApi.middleware)
-      .concat(chatApi.middleware),
+    }).concat(authApi.middleware),
   devTools: process.env.REACT_APP_ENVIRONMENT !== "production",
 })
 

@@ -2,8 +2,6 @@ import { FetchBaseQueryError, createApi } from "@reduxjs/toolkit/dist/query/reac
 
 import { baseQueryAuth } from "app/apiSlice"
 
-import { setText } from "entities/console-alert/model/slice"
-
 import { setAuth } from "../model/slice"
 
 export const authApi = createApi({
@@ -21,12 +19,10 @@ export const authApi = createApi({
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
           await queryFulfilled
-          dispatch(setText("success"))
           dispatch(setAuth(true))
         } catch (err) {
           const error = err as FetchBaseQueryError
           console.error(error)
-          dispatch(setText(JSON.stringify(error)))
         }
       },
     }),
