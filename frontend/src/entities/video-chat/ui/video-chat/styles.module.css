@@ -4,7 +4,7 @@
   align-items: center;
 }
 
-.videos {
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,22 +13,20 @@
   position: relative;
 }
 
-.videos video {
+.half {
+  display: flex;
+  position: relative;
   width: 100%;
   height: 50%;
+}
+
+.wrapper video {
   object-fit: cover;
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
 }
 
-.log {
-  z-index: 999;
+.iconNext {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  display: flex;
-  background-color: white;
-  color: black;
 }

@@ -5,6 +5,7 @@ import { setIsSearching } from "entities/video-chat/model/slice"
 import NoizeImg from "shared/assets/noize.jpg"
 import { Loader } from "shared/ui/loader"
 
+import { OnlineUsers } from "../online-users"
 import styles from "./styles.module.css"
 
 export const Searching = () => {
@@ -18,7 +19,7 @@ export const Searching = () => {
     <div className={styles.searching}>
       <img className={styles.imgNoize} src={NoizeImg} alt="Noize" />
       <div className={styles.body}>
-        <h4 className={styles.online}>Онлайн: 123 412 пользов.</h4>
+        <OnlineUsers />
         <div className={styles.loader}>
           <span>Поиск..</span>
           <Loader />

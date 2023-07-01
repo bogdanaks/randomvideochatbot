@@ -16,6 +16,7 @@ import NoizeImg from "shared/assets/noize.jpg"
 import { countries } from "shared/config/countries"
 import { Flag } from "shared/ui/flag"
 
+import { OnlineUsers } from "../online-users"
 import styles from "./styles.module.css"
 
 interface Country {
@@ -122,7 +123,7 @@ export const SettingsSearch = () => {
       <UserSettings />
       <img className={styles.imgNoize} src={NoizeImg} alt="Noize" />
       <div className={styles.body}>
-        <h4 className={styles.online}>Онлайн: 100 пользов.</h4>
+        <OnlineUsers />
         <div className={styles.settingsIcon} onClick={handleSettingsClick}>
           <HiOutlineCog8Tooth size={24} />
         </div>
