@@ -16,7 +16,6 @@ import cors from "cors"
 import path from "path"
 import fs from "fs"
 import routes from "./modules"
-import { ServerOptions } from "https"
 
 const privateKey = fs.readFileSync(path.join(__dirname, "../ssl/privkey.pem")).toString()
 const certificate = fs.readFileSync(path.join(__dirname, "../ssl/fullchain.pem")).toString()
@@ -34,7 +33,6 @@ export const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 })
-
 
 AppDataSource.initialize()
   .then(async () => {
