@@ -20,3 +20,13 @@
   -webkit-transform: rotateY(180deg);
   -moz-transform: rotateY(180deg);
 }
+
+.log {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  background-color: white;
+  color: black;
+}

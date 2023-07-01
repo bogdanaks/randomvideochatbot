@@ -1,11 +1,9 @@
 import { PeerContext } from "processes/peer-provider"
 import React, { useContext, useEffect, useState } from "react"
 
-import { useAppSelector } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 
-import { selectVideoChat } from "entities/video-chat/model/slice"
-
-import { Loader } from "shared/ui/loader"
+import { selectVideoChat, setIsSearching } from "entities/video-chat/model/slice"
 
 import { Searching } from "../searching"
 import { SettingsChat } from "../settings-chat"
@@ -16,6 +14,7 @@ export const VideoChat: React.FC = () => {
     useContext(PeerContext)
   const [strLog, setStrLog] = useState("")
   const videoChat = useAppSelector(selectVideoChat)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (!myVideoRef?.current) return
@@ -51,6 +50,7 @@ export const VideoChat: React.FC = () => {
             if (!isPlaying && setRecipientPeerId) {
               setRecipientPeerId(callRecipientPeerId)
               await peerVideoRef.current.play()
+              dispatch(setIsSearching(false))
             }
           }
         })
@@ -64,6 +64,7 @@ export const VideoChat: React.FC = () => {
 
   return (
     <div className={styles.videos}>
+      <div className={styles.log}>{strLog}</div>
       {videoChat.isSearching && <Searching />}
       {!recipientPeerId && !videoChat.isSearching && <SettingsChat />}
       <video
