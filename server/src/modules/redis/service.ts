@@ -28,16 +28,54 @@ export class RedisService {
     await this.pubClient.set(`users:${user.id}`, JSON.stringify(user), "EX", 3600)
   }
 
-  async getRandomUserByCountry(country: Country | null) {
+  async getUsersByCountry(country: Country | null) {
     const countryKey = country ? `country:${country.code}` : "country:all"
-    const user = await this.subClient.spop(`users:${countryKey}`)
-    console.log("user", user)
-    return user
+    return await this.subClient.smembers(`users:${countryKey}`)
   }
 
   async addUserToWaitList(userId: string, country: Country | null) {
     const countryKey = country ? `country:${country.code}` : "country:all"
-    console.log("countryKey", countryKey)
-    await this.pubClient.sadd(`users:${countryKey}`, userId)
+    const useKey = `users:${countryKey}`
+
+    await this.pubClient.sadd(useKey, userId)
+    await this.pubClient.expire(useKey, 3600)
+  }
+
+  async removeUserFromWaitList(userId: string, country: Country | null) {
+    const countryKey = country ? `country:${country.code}` : "country:all"
+    const useKey = `users:${countryKey}`
+
+    await this.pubClient.srem(useKey, userId)
+    await this.pubClient.expire(useKey, 3600)
+  }
+
+  async getPrevUsersCall(userId: string) {
+    return await this.subClient.smembers(`users:${userId}:call`)
+  }
+
+  async setPrevUsersCall(userId: string, prevUserId: string) {
+    const usersList = await this.getPrevUsersCall(userId)
+    if (usersList.includes(prevUserId)) return
+
+    if (usersList.length >= 5) {
+      await this.pubClient.srem(`users:${userId}:call`, usersList[0])
+    }
+
+    await this.pubClient.sadd(`users:${userId}:call`, prevUserId)
+    await this.pubClient.sadd(`users:${prevUserId}:call`, userId)
+    await this.pubClient.expire(`users:${userId}:call`, 3600)
+    await this.pubClient.expire(`users:${prevUserId}:call`, 3600)
+  }
+
+  async setConnectedUser(userId: string) {
+    await this.pubClient.set(`users:${userId}:connected`, "true", "EX", 3600)
+  }
+
+  async removeConnectedUser(userId: string) {
+    await this.pubClient.del(`users:${userId}:connected`)
+  }
+
+  async isConnectedUser(userId: string) {
+    return !!(await this.pubClient.get(`users:${userId}:connected`))
   }
 }

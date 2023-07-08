@@ -7,7 +7,7 @@ export const peerConfig =
         path: "/peerjs",
         port: 9000,
         key: "rvc",
-        debug: 3,
+        debug: 2,
         secure: false,
       }
     : {
@@ -15,6 +15,6 @@ export const peerConfig =
         path: "/peerjs",
         port: 443,
         key: "rvc",
-        debug: 3,
+        debug: 2,
         secure: true,
       }

@@ -1,19 +1,22 @@
-import { MediaConnection } from "peerjs"
-import { PeerContext } from "processes/peer-provider"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { HiOutlineCog8Tooth } from "react-icons/hi2"
 
-import { useAppDispatch } from "app/hooks"
+import { useAppDispatch, useAppSelector } from "app/hooks"
 
 import { SoketEvents } from "entities/chat/model/enums"
 import { socket } from "entities/chat/model/socket"
-import { setIsVisibleSettings } from "entities/user/model/slice"
+import {
+  selectSelectedCountry,
+  setIsVisibleSettings,
+  setSelectedCountry,
+} from "entities/user/model/slice"
 import { UserSettings } from "entities/user/ui/user-settings"
 import { setIsSearching } from "entities/video-chat/model/slice"
 
 import GlobeImg from "shared/assets/globe.png"
 import NoizeImg from "shared/assets/noize.jpg"
 import { countries } from "shared/config/countries"
+import { usePeer } from "shared/hooks/use-peer"
 import { Flag } from "shared/ui/flag"
 
 import { OnlineUsers } from "../online-users"
@@ -25,85 +28,29 @@ interface Country {
 }
 
 export const SettingsSearch = () => {
-  const { peer, peerVideoRef, setRecipientPeerId } = useContext(PeerContext)
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
   const [isCountryVisible, setIsCountryVisible] = useState(false)
   const dispatch = useAppDispatch()
+  const selectedCountry = useAppSelector(selectSelectedCountry)
+  const { handleCall, handlePeerDisconnect } = usePeer()
 
   const handleCountrySelect = () => {
     setIsCountryVisible(!isCountryVisible)
   }
 
   const handleCountryClick = (country: Country | null) => {
-    setSelectedCountry(country)
+    dispatch(setSelectedCountry(country))
   }
 
-  // TODO dublicate
-  function checkMediaConnection(connection: MediaConnection) {
-    connection.on("stream", () => {
-      // eslint-disable-next-line no-console
-      console.log("Соединение установлено!")
-      // Выполните здесь действия, которые вы хотите выполнить при успешном соединении
-    })
-
-    connection.on("close", () => {
-      // eslint-disable-next-line no-console
-      console.log("Соединение закрыто!")
-      // Выполните здесь действия, которые вы хотите выполнить при закрытии соединения
-    })
-
-    connection.on("error", (error) => {
-      // Ошибка соединения
-      // eslint-disable-next-line no-console
-      console.log("Ошибка соединения:", error)
-      // Выполните здесь действия, которые вы хотите выполнить при ошибке соединения
-    })
+  const handleNextSearch = async () => {
+    await handlePeerDisconnect()
+    dispatch(setIsSearching(true))
+    socket.emit(SoketEvents.SearchUser, selectedCountry, handleSearchUser)
   }
 
-  const handleCall = (peerCallId: string) => {
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "user" }, audio: true })
-      .then((stream) => {
-        // Отправка вызова другому участнику
-        const call = peer.call(peerCallId, stream, {
-          metadata: {
-            peerId: peer.id,
-          },
-        })
-        if (!call) {
-          console.error("Ошибка при отправке вызова")
-          return
-        }
-
-        checkMediaConnection(call)
-
-        call.on("stream", async (remoteStream) => {
-          if (peerVideoRef?.current) {
-            peerVideoRef.current.srcObject = remoteStream
-            peerVideoRef.current.playsInline = true
-
-            const isPlaying =
-              peerVideoRef.current.currentTime > 0 &&
-              !peerVideoRef.current.paused &&
-              !peerVideoRef.current.ended &&
-              peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
-            if (!isPlaying && setRecipientPeerId) {
-              setRecipientPeerId(peerCallId)
-              await peerVideoRef.current.play()
-              dispatch(setIsSearching(false))
-            }
-          }
-        })
-      })
-      .catch((error) => {
-        console.error("Ошибка при доступе к медиа-устройствам:", error)
-      })
-  }
-
-  const handleSearchUser = (peerId: string | null) => {
+  const handleSearchUser = async (peerId: string | null) => {
     if (peerId) {
-      handleCall(peerId)
-      return
+      await handleCall(peerId, handleNextSearch)
+      dispatch(setIsSearching(false))
     } else {
       dispatch(setIsSearching(true))
     }
