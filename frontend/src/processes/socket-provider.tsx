@@ -4,18 +4,18 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { setSocket, socket } from "entities/chat/model/socket"
 import { useTelegram } from "entities/telegram/model"
 
+import { Loader } from "shared/ui/loader"
+
 const SocketProvider = () => {
   const { user: tgUser, initData } = useTelegram()
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(socket?.connected || false)
-  const [logStr, setLogStr] = useState("")
 
   const handleDisconnect = () => {
     setIsConnected(false)
   }
 
   const handleConnectError = (err: Error) => {
-    setLogStr(String(err.message))
     if (err.message === "User not found") {
       navigate("/sign-in")
     }
@@ -30,7 +30,6 @@ const SocketProvider = () => {
     if (!socket || !tgUser?.id) return
 
     socket.on("connect", () => {
-      setLogStr("connect")
       setIsConnected(true)
 
       // eslint-disable-next-line no-console
@@ -38,17 +37,6 @@ const SocketProvider = () => {
     })
 
     socket.on("connect_error", handleConnectError)
-
-    // ROOMS
-    // socketConnected.on(SoketEvents.RoomUpdate, (roomId: string) => {
-    //   dispatch(setRoomId(roomId))
-    // })
-    // socketConnected.on(SoketEvents.RoomUserJoin, (user: UserEntity) => {
-    //   dispatch(joinUser(user))
-    // })
-    // socketConnected.on(SoketEvents.RoomUserLeave, (user_id: string) => {
-    //   dispatch(leaveUser(user_id))
-    // })
 
     socket.connect()
 
@@ -63,9 +51,15 @@ const SocketProvider = () => {
     <Outlet />
   ) : (
     <div
-      style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}
+      style={{
+        height: "100vh",
+        width: "100wh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      Socket is not connected Tg: {tgUser?.id} {logStr}
+      <Loader />
     </div>
   )
 }
