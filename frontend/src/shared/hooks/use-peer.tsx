@@ -110,7 +110,7 @@ export const usePeer = () => {
           peerVideoRef.current.readyState > peerVideoRef.current.HAVE_CURRENT_DATA
         if (!isPlaying && setRecipientPeerId) {
           setRecipientPeerId(peerCallId)
-          // await peerVideoRef.current.play()
+          await peerVideoRef.current.play()
         }
       }
     })
@@ -156,7 +156,7 @@ export const usePeer = () => {
 
           if (!isPlaying && setRecipientPeerId) {
             setRecipientPeerId(callRecipientPeerId)
-            // await peerVideoRef.current.play()
+            await peerVideoRef.current.play()
           }
         }
       })
@@ -167,7 +167,7 @@ export const usePeer = () => {
     if (myVideoRef?.current) {
       myVideoRef.current.srcObject = await myVideStream
       myVideoRef.current.playsInline = true
-      // await myVideoRef.current.play()
+      await myVideoRef.current.play()
     }
   }
 
