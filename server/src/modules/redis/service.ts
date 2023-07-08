@@ -78,4 +78,16 @@ export class RedisService {
   async isConnectedUser(userId: string) {
     return !!(await this.pubClient.get(`users:${userId}:connected`))
   }
+
+  async incrementOnlineUsers() {
+    await this.pubClient.incr("users:online")
+  }
+
+  async decrementOnlineUsers() {
+    await this.pubClient.decr("users:online")
+  }
+
+  async getOnlineUsers() {
+    return await this.pubClient.get("users:online")
+  }
 }

@@ -89,6 +89,10 @@ AppDataSource.initialize()
     peerServer.on("error", (err) => {
       console.log("Peer Server error", err)
     })
+
+    peerServer.on("disconnect", async (client) => {
+      console.log("Peer Server disconnect client:", client.getId())
+    })
   })
   .catch(async (err) => {
     console.error("Error initialization:", err)

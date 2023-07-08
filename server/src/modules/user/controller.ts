@@ -85,13 +85,20 @@ export class UserController {
 
   async setConnectedUser(userId: string) {
     await this.redisService.setConnectedUser(userId)
+    await this.redisService.incrementOnlineUsers()
   }
 
   async removeConnectedUser(userId: string) {
     await this.redisService.removeConnectedUser(userId)
+    await this.redisService.decrementOnlineUsers()
   }
 
   async isConnected(userId: string) {
     return await this.redisService.isConnectedUser(userId)
+  }
+
+  async getOnlineUsers() {
+    const count = await this.redisService.getOnlineUsers()
+    return count ? Number(count) : 0
   }
 }

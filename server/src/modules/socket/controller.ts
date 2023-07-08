@@ -23,6 +23,7 @@ export class SocketController {
     socket.on(SocketEvents.SearchUser, (selectedCountry, resolve) =>
       this.onSearchUser(resolve, socket.data.user.id, selectedCountry)
     )
+    socket.on(SocketEvents.GetOnline, (resolve) => this.getOnlineUsers(resolve))
     socket.on(SocketEvents.Disconnect, () => this.onDisconnect(String(socket.data.user.id)))
   }
 
@@ -40,6 +41,11 @@ export class SocketController {
 
     await this.userController.addUserToPrevList(userId, user)
     resolve(user)
+  }
+
+  async getOnlineUsers(resolve: any) {
+    const count = await this.userController.getOnlineUsers()
+    resolve(count)
   }
 
   async onDisconnect(userId: string) {

@@ -3,4 +3,5 @@ export enum SocketEvents {
   ConnectionError = "connect_error",
   Disconnect = "disconnect",
   SearchUser = "searchUser",
+  GetOnline = "getOnline",
 }
